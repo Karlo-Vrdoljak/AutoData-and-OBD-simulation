@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-SuceljeApplication<sucelje>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.mqtt.sucelje.SuceljeApplication",
+            "projectName": "sucelje",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ObdAutodataApplication<obd-autodata>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.obdsimulation.obdautodata.ObdAutodataApplication",
+            "projectName": "obd-autodata",
+            "args": ""
+        }
+    ]
+}
