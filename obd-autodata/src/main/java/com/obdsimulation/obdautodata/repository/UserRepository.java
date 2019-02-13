@@ -7,7 +7,5 @@ import com.obdsimulation.obdautodata.domain.User;
 public interface UserRepository extends CrudRepository<User, Long> {
 
     User findByUsername(String username);
-    
-    
 
 }

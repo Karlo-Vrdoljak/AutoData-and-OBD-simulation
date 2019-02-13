@@ -1,0 +1,12 @@
+<div th:fragment="registerRedirectSidebar">
+    <div class="card my-4">
+        <h5 class="card-header">Don't have an account yet?</h5>
+        <div class="card-body">
+            Register now and you're a few clicks away from 
+            checking out what's going on under the hood!
+            <form th:action="@{/register}" method="GET" class="form-inline mb-1">
+                <button type="submit" style="border-radius: 2rem;" class="btn btn-primary mb-2">Go!</button>
+            </form>  
+        </div>
+    </div>
+</div>

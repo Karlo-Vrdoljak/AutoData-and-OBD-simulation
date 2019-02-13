@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/head :: headerFragment">
+  <title id="pageTitle">OBD VDS</title>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <div th:replace="fragments/navbar :: navBar"></div>
+  <!-- Page Content -->
+  <div th:if="${successCar}" class="alert alert-success alert-dismissible fade show" role="alert">
+    <h2><span th:utext="${successCar}"></span></h2>
+    <hr>
+    <p>You have successfully registered your vehicle!
+      Don't wait, go to your profile and look at the results!</p>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="container">
+
+
+    <div class="row">
+
+      <!-- Post Content Column -->
+      <div class="col-lg-8">
+
+        <!-- Title -->
+        <h1 class="mt-4">OBD Diagnostics</h1>
+
+        <!-- Author -->
+        <p class="lead">
+          Register your vehicle and view all of your OBD DTC's
+        </p>
+
+        <hr>
+
+        <!-- Date/Time -->
+        <p>Opel Astra F GSI</p>
+
+        <hr>
+
+        <!-- Preview Image -->
+        <img class="img-fluid rounded" th:src="@{/images/home.jpg}" height="300" alt="">
+
+        <hr>
+
+        <!-- Post Content -->
+        <p class="lead">This Service 1st takes into account that your vehicle has up to OBD-I
+          <i>(On-Board diagnostics)</i>. Which means that only vehicle generations from 1970
+          to 2005 can be eligible for the scan.
+        </p>
+
+        <p>We ask only necessary information about you and your vehicle, and in no way will your
+          data be misplaced or abused. Everything you do on this site, stays on this site!
+        </p>
+
+        <p class="lead">Here are the results of our own presentational vehicle.</p>
+
+        <div class="card my-3" style="max-width: 75rem;">
+          <img class="card-img-top" th:src="@{/images/models/Opel.jpg}" height="300" alt="Card image cap">
+            <div class="card-header d-flex justify-content-between text-white bg-dark">
+              <span class="pt-2 font-weight-bold" th:utext="${'Opel Astra'}"></span>
+            </div>
+          <div class="card-body">
+            <div class="card-title mb-1 mt-1">
+              <h6 class="mb-1 lead">Fuel</h6>
+            </div>
+            <p class="mb-1">Gasoline</p>
+            <hr>
+            <div class="card-title mb-1 mt-1">
+              <h6 class="mb-1 lead">Year</h6>
+            </div>
+            <p class="mb-1">1995</p>
+            <hr>
+            <div class="card-title mb-1 mt-1">
+              <h6 class="mb-1 lead">Power Output</h6>
+            </div>
+            <p class="mb-1">184 HP</p>
+            <hr>
+            <div class="card-title mb-1 mt-1">
+              <h6 class="mb-1 lead">Gearbox</h6>
+            </div>
+            <p class="mb-1">5 Manual</p>
+            <hr>
+            <div>
+              <div class="card-title mb-1 mt-1">
+                <h6 class="mb-1 lead">VIN</h6>
+              </div>
+              <p class="mb-1">WOL000051S2506989</p>
+            </div>
+            <hr>
+            <div>
+              <div class="card-title mb-1 mt-1">
+                <h6 class="mb-1 lead">Compression Ratio</h6>
+              </div>
+              <p class="mb-1">10.5</p>
+            </div>
+            <hr>
+            <div>
+              <div class="card-title mb-1 mt-1">
+                <h6 class="mb-1 lead">Number of Cylinders</h6>
+              </div>
+              <p class="mb-1">4 Inline</p>
+            </div>
+            <hr>
+            <div>
+              <div class="card-title mb-1 mt-1">
+                <h6 class="mb-1 lead">Engine Oil Grade</h6>
+              </div>
+              <p class="mb-1">10w40</p>
+              
+            </div>
+            <hr>
+            <div>
+              <div class="card-title mb-1 mt-1">
+                <h6 class="mb-1 lead">Engine Capacity</h6>
+              </div>
+              <p class="mb-1">2.0</span></p>
+            </div>
+            <hr>
+            <div>
+              <div class="card-title mb-1 mt-1">
+                <h6 class="mb-1 lead">Engine Code</h6>
+              </div>
+              <p class="mb-1">C20XE</span></p>
+            </div>
+          </div>
+        </div>
+
+        <blockquote class="blockquote">
+          <p class="mb-0">It's worth noting that this site is for educational purposes and works only as a simulational tool, which lacks real life implementation</p>
+          <footer class="blockquote-footer">OBD VDS
+          </footer>
+        </blockquote>
+
+        <p class="lead">Here are the DTC's <i>(Diagnostic Trouble Codes) </i> that were found
+          in this vehicle.</p>
+        <hr>
+        
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Vehicle</th>
+                <th scope="col">Errors Found</th>
+                <th scope="col">Total Repair Time</th>
+                <th scope="col">Total Repair Cost</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row" style="text-align:center;"><span>Opel Astra F 1995</span>
+                </th>
+                <th scope="row" style="text-align:center;"><span id="total_errors">4</span>
+        
+                </th>
+                <th scope="row" style="text-align:center;"><span id="total_time">1 hour &amp; 3 minutes</span>
+                </th>
+                <th scope="row" style="text-align:center;"><span id="total_cost">159.16 HRK</span></th>
+              </tr>
+            </tbody>
+          </table>
+          <table class="table table-striped table-hover shadow">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Error Code</th>
+                <th scope="col">Fault</th>
+                <th scope="col">Cause</th>
+                <th scope="col">Repair Time</th>
+                <th scope="col">Cost</th>
+              </tr>
+            </thead>
+            <tbody>
+        
+              <tr>
+                <th scope="row"><span>13</span></th>
+                <td style="text-align:center;"><span>Heated oxygen sensor (HO2S)/oxygen sensor (O2S) - open circuit</span></td>
+                <td style="text-align:center;"><span>Wiring, HO2S/O2S, ECM</span></td>
+                <td style="text-align:center;">
+                  <span id="13">15 minutes</span>
+                </td>
+                <td id="13Wiring, HO2S/O2S, ECM" style="text-align:center;">37.50 HRK</td>
+              </tr>
+              <tr>
+                <th scope="row"><span>21</span></th>
+                <td style="text-align:center;"><span>Throttle position sensor (TPS)</span></td>
+                <td style="text-align:center;"><span>Out of range/Performance</span></td>
+                <td style="text-align:center;">
+                  <span id="21">13 minutes</span>
+                </td>
+                <td id="21Out of range/Performance" style="text-align:center;">33.33 HRK</td>
+              </tr>
+              <tr>
+                <th scope="row"><span>32</span></th>
+                <td style="text-align:center;"><span>Exhaust Gas Recirculation (EGR)</span></td>
+                <td style="text-align:center;"><span>Circuit fault</span></td>
+                <td style="text-align:center;">
+                  <span id="32">18 minutes</span>
+                </td>
+                <td id="32Circuit fault" style="text-align:center;">45.83 HRK</td>
+              </tr>
+              <tr>
+                <th scope="row"><span>39</span></th>
+                <td style="text-align:center;"><span>Clutch input sensor</span></td>
+                <td style="text-align:center;"><span>Circuit fault</span></td>
+                <td style="text-align:center;">
+                  <span id="39">17 minutes</span>
+                </td>
+                <td id="39Circuit fault" style="text-align:center;">42.50 HRK</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <hr>
+      </div>
+
+      <!-- Sidebar Widgets Column -->
+      <div class="col-md-4">
+
+
+        <div sec:authorize="isAnonymous()">
+          <!-- login Widget -->
+          <div th:replace="fragments/login_sidebar :: loginSideBar"></div>
+          <!-- Register redirect Widget -->
+          <div th:replace="fragments/register_redirect_sidebar :: registerRedirectSidebar"></div>
+        </div>
+
+        <div sec:authorize="isAuthenticated()">
+          <!-- Side Widget -->
+          <div th:replace="fragments/register_vehicle_sidebar :: registerVehicleSidebar"></div>
+        </div>
+      </div>
+
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <div th:replace="fragments/footer.html :: footerFragment"></div>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>DTC Showcase</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link th:href="@{/css/blog-post.css}" rel="stylesheet">
+    <link th:href="@{/css/dashboard.css}" rel="stylesheet">
+    <link th:href="@{/css/profile.css}" rel="stylesheet">
+</head>
+
+<body>
+    <!--
+    <script src="js/validation.js"></script>
+    <script src="js/show_user_details.js"></script>
+    -->
+
+    <div th:replace="fragments/navbar :: navBar"></div>
+
+    <!-- Page Content -->
+    <div class="container" th:object="${errors}">
+        <div class="w-100 mb-2 mt-4"></div>
+
+        <div class="row">
+            <div class="col">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Vehicle</th>
+                                <th scope="col">Errors Found</th>
+                                <th scope="col">Total Repair Time</th>
+                                <th scope="col">Total Repair Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row" style="text-align:center;"><span th:utext="${veh.manufacturername + ' ' + veh.modelname + ' ' + veh.year}"> </span>
+                                <th scope="row" style="text-align:center;"><span id="total_errors"> </span>
+
+                                <th scope="row" style="text-align:center;"><span id="total_time"> </span>
+                                </th>
+                                <th scope="row" style="text-align:center;"><span id="total_cost">
+                                    </span></th>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-striped table-hover shadow">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Error Code</th>
+                                <th scope="col">Fault</th>
+                                <th scope="col">Cause</th>
+                                <th scope="col">Repair Time</th>
+                                <th scope="col">Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:if="${errors.empty}">
+                                <td colspan="4">You have no errors on this vehicle, congratulations!</td>
+                            </tr>
+                            <tr th:each="err: ${errors}">
+                                <th scope="row"><span th:text="${err.errorcode}"> code </span></th>
+                                <td style="text-align:center;"><span th:text="${err.fault}">
+                                        fault </span></td>
+                                <td style="text-align:center;"><span th:text="${err.cause}"> cause
+                                    </span></td>
+                                <td style="text-align:center;">
+                                    <span th:id="${err.errorcode}"></span>
+                                </td>
+                                <td th:id="${err.errorcode + err.cause}" style="text-align:center;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="w-100 mb-6 mt-2"></div>
+
+    <!-- /.container -->
+
+    <!--
+        <div th:replace="fragments/footer.html :: footerFragment"></div>
+    -->
+    <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+    <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:inline="javascript">
+        function calculate_repair_time(repTime) {
+            var time = parseInt(repTime);
+            var hours = time / 3600;
+            var minutes = (time % 3600) / 60;
+            var repair = "";
+            if (Math.floor(hours) >= 1) {
+                if (Math.floor(hours) == 1) {
+                    repair += Math.floor(hours) + ' hour ';
+                }
+                else {
+                    repair += Math.floor(hours) + ' hours ';
+                }
+            }
+            if (Math.floor(hours) >= 1 && Math.floor(minutes) >= 1) {
+                repair += '& ';
+            }
+            if (Math.floor(minutes) >= 1) {
+                if (Math.floor(minutes) == 1) {
+                    repair += Math.floor(minutes) + ' minute';
+                } else {
+                    repair += Math.floor(minutes) + ' minutes';
+                }
+            }
+
+            return repair;
+        }
+
+        var full_cost = 0;
+        var full_repair_sec = 0;
+        var errors = /*[[${errors}]]*/ null;
+        for (let err of errors) {
+            full_repair_sec += parseInt(err.repairTime);
+            var repair = calculate_repair_time(err.repairTime);
+            document.getElementById(err.errorcode).innerHTML = repair;
+            var cost = (err.repairTime / 3600) * 150;
+            cost = cost.toFixed(2);
+            full_cost += parseFloat(cost);
+            var id = err.errorcode.toString() + err.cause;
+            document.getElementById(id).innerHTML = cost + ' HRK';
+        }
+        var full_repair = calculate_repair_time(full_repair_sec);
+            document.getElementById("total_time").innerHTML = full_repair;
+            document.getElementById("total_errors").innerHTML = errors.length;          
+            document.getElementById("total_cost").innerHTML = full_cost.toFixed(2) + ' HRK';
+    
+        
+
+    </script>
+
+</body>
+
+</html>

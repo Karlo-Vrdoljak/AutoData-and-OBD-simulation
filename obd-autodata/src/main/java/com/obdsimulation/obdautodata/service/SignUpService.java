@@ -1,7 +1,5 @@
 package com.obdsimulation.obdautodata.service;
 
-import java.util.Arrays;
-import java.util.HashSet;
 
 import javax.annotation.PostConstruct;
 
@@ -30,20 +28,18 @@ public class SignUpService {
 
     @PostConstruct
     private void setupDefaultUser(){
-        // Arrays.asList(new UserRole("USER"), new UserRole("ADMIN"))
+        //Arrays.asList(new UserRole("USER"), new UserRole("ADMIN"));
+        
         if(userRepository.count() == 0){
-            /*
-             * UserRole userRole = roleRepository.findByRole("USER"); UserRole adminRole =
-             * roleRepository.findByRole("ADMIN");
-             */
+            roleRepository.save(new UserRole("USER"));
+            roleRepository.save(new UserRole("ADMIN"));
             userRepository.save(new User()
             .setEmail("asdf@gmail.com")
             .setActive(1)
-            .setLastname("Vrdoljak")
+            .setLastName("Vrdoljak")
             .setName("Karlo")
             .setUsername("ramiz")
             .setPassword(passwordEncoder.encode("asdfasdf"))
-            .setRoles(Arrays.asList(new UserRole("USER"), new UserRole("ADMIN")))
             );
         }
     }

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Dashboard</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link th:href="@{/css/blog-post.css}" rel="stylesheet">
+    <link th:href="@{/css/dashboard.css}" rel="stylesheet">
+    <link th:href="@{/css/profile.css}" rel="stylesheet">
+</head>
+
+<body>
+    <!--
+    <script src="js/validation.js"></script>
+    <script src="js/show_user_details.js"></script>
+    -->
+
+    <div th:replace="fragments/navbar :: navBar"></div>
+
+    <!-- Page Content -->
+    <div class="container" th:object="${user}">
+        <div class="w-100 mb-2 mt-4"></div>
+
+        <div class="row">
+            <div class="col">
+                <nav>
+                    <div class="nav nav-tabs mb-2" id="nav-tab" role="tablist">
+                        <a class="nav-item btn btn-outline-info ml-1 mr-1 mb-2 active" id="nav-home-tab" data-toggle="tab"
+                            href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">All users</a>
+                        <a class="nav-item btn btn-outline-primary ml-1 mr-1 mb-2" id="nav-profile-tab" data-toggle="tab"
+                            href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">All
+                            vehicles</a>
+                        <a class="nav-item btn btn-outline-success ml-1 mr-1 mb-2" id="nav-contact-tab" data-toggle="tab"
+                            href="#nav-contact" role="tab" aria-controls="nav-contact"
+                            aria-selected="false">Statistics</a>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <form th:action="@{/admin/edituser}" method="post">
+                            <table class="table table-striped table-hover shadow">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">id</th>
+                                        <th scope="col">Username</th>
+                                        <th scope="col">Role</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Last name</th>
+                                        <th scope="col">email</th>
+                                        <th scope="col">Account status</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:if="${listOfUsers.empty}">
+                                        <td colspan="6">No users registered</td>
+                                    </tr>
+                                    <tr th:each="user: ${listOfUsers}">
+                                        <th scope="row"><span th:text="${user.id}"> id </span></th>
+                                        <th scope="row"><span th:text="${user.username}"> id </span></th>
+                                        <td style="text-align:center;"><span
+                                                th:each="role: ${user.getRoles().toArray()}" th:remove="tag">
+                                                <span th:text="${role.role} " th:remove="tag"></span>
+                                            </span></td>
+                                        <td style="text-align:center;"><span th:text="${user.name}"> Name </span></td>
+                                        <td style="text-align:center;"><span th:text="${user.lastName}"> Last name
+                                            </span></td>
+                                        <td style="text-align:center;"><span th:text="${user.email}"> email </span></td>
+                                        <td style="text-align:center;"><span
+                                                th:text="${user.active} ? 'Active' : 'Disabled'">
+                                                Account status </span></td>
+                                        <td style="text-align:center;"><button class="btn btn-warning btn-sm"
+                                                type="submit" id="edit" th:name="username"
+                                                th:value="${user.username}">Expand</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel"
+                            aria-labelledby="nav-home-tab">
+                            <form th:action="@{/admin/vehicle_details}" method="post">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover shadow">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th scope="col">Owner</th>
+                                                <th scope="col">Manufacturer</th>
+                                                <th scope="col">Model</th>
+                                                <th scope="col">Year</th>
+                                                <th scope="col">Fuel</th>
+                                                <th scope="col">Power Output</th>
+                                                <th scope="col">Gearbox</th>
+                                                <th scope="col">Errors</th>
+                                                <th scope="col"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:if="${vehicles.empty}">
+                                                <td colspan="7">No users registered</td>
+                                            </tr>
+                                            <tr th:each="veh: ${vehicles}">
+                                                <th scope="row"><span th:text="${veh.owner}"> owner </span></th>
+                                                <td style="text-align:center;"><span th:text="${veh.manufacturername}">
+                                                        manufacturer </span></td>
+                                                <td style="text-align:center;"><span th:text="${veh.modelname}"> model
+                                                    </span></td>
+                                                <td style="text-align:center;"><span th:text="${veh.year}"> year </span>
+                                                </td>
+                                                <td style="text-align:center;"><span th:text="${veh.engineType}"> engine type
+                                                    </span></td>
+                                                <td style="text-align:center;"><span th:text="${veh.power}"> power
+                                                    </span></td>
+                                                <td style="text-align:center;"><span th:text="${veh.gearbox}"> gearbox
+                                                </span></td>
+                                                <th  scope="row" style="text-align:center;"><span th:text="${veh.errors.size()}"> num errors
+                                                    </span></th>
+                                                <td style="text-align:center;"><button class="btn btn-warning btn-sm"
+                                                        type="submit" th:name="id"
+                                                        th:value="${veh.id}">Expand</button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover shadow">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col">&numero; of Registered Vehicles</th>
+                                            <th scope="col">&numero; of Registered Users</th>
+                                            <th scope="col">&numero; of Registered Admins</th>
+                                            <th scope="col">&numero; of Detected Errors</th>
+                                            <th scope="col">Total estimated Repair Time</th>
+                                            <th scope="col">Total estimated Repair Cost</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:if="${stats == null}">
+                                            <td>No data available</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row"><span th:text="${stats.vehicles}"> vehs </span></th>
+                                            <td class="text-center"><span th:text="${stats.users}">
+                                                    users </span></td>
+                                            <td class="text-center"><span th:text="${stats.admins}"> admins
+                                                </span></td>
+                                            <td class="text-center"><span th:text="${stats.errors}"> errors </span>
+                                            </td>
+                                            <td class="text-center"><span th:text="${stats.repairs}"> repairs
+                                                </span></td>
+                                            <td class="text-center"><span th:text="${stats.costs}"> costs
+                                                </span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                    
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="w-100 mb-6 mt-2"></div>
+
+    <!-- /.container -->
+
+    <!--
+        <div th:replace="fragments/footer.html :: footerFragment"></div>
+    -->
+    <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+    <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+
+</body>
+
+</html>

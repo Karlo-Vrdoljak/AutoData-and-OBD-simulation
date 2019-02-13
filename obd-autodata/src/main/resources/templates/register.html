@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Registration</title>
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/blog-post.css" rel="stylesheet">
+    <link href="css/image.css" rel="stylesheet">
+    <link href="css/register.css?d" rel="stylesheet">
+
+</head>
+
+<body>
+    <div th:replace="fragments/navbar :: navBar"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-xl-9 mx-auto">
+                <div class="card card-signin flex-row my-5">
+                    <div class="card-img-left d-none d-md-flex">
+                        <!-- Background image for card set in CSS! -->
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Provide us your credentials</h5>
+                        <form th:action="@{/registerUser}" th:object="${user}" method="post" autocomplete="off" class="form-signin"
+                            onsubmit="return validate()">
+                            <div class="form-label-group">
+                                <input type="text" th:field="*{username}" id="inputUsername" class="form-control" placeholder="Username" name="username"
+                                    required onfocusout="validateUsername()">
+                                <span>&nbsp</span>
+                            </div>
+                            <div class="form-label-group">
+                                <input type="text" id="inputFirstname" th:field="*{name}" class="form-control" placeholder="First Name"
+                                     required onfocusout="validateFirstName()">
+                                <span>&nbsp</span>
+                            </div>
+                            <div class="form-label-group">
+                                <input type="text" id="inputLastName" th:field="*{lastName}"  class="form-control" placeholder="Last Name" 
+                                    required onfocusout="validateLastName()">
+                                <span>&nbsp</span>
+                            </div>
+                            <div class="form-label-group">
+                                <input type="email" id="inputEmail" th:field="*{email}"  class="form-control" placeholder="Email address"
+                                    required onfocusout="validateEmail()">
+                                <span>&nbsp</span>
+                                <small id="inputEmail"></small>
+                            </div>
+                            <hr>
+                            <div class="form-label-group">
+                                <input type="password" id="inputPassOne" th:field="*{password}" class="form-control" placeholder="Password"
+                                     required onfocusout="validatePassword()">
+                                <span>&nbsp</span>
+                            </div>
+                            <div class="form-label-group">
+                                <input type="password" id="inputPassTwo" name="passTwo" class="form-control"
+                                    placeholder="Confirm password" required onfocusout="validatePassword()">
+                                <span>&nbsp</span>
+
+                            </div>
+                            <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Register</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="fragments/footer.html :: footerFragment"></div>
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/validation.js"></script>
+
+</body>
+
+</html>

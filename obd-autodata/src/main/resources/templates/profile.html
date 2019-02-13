@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>My Profile</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/blog-post.css" rel="stylesheet">
+    <link href="css/profile.css" rel="stylesheet">
+</head>
+
+<body>
+    <script src="js/validation.js"></script>
+    <script src="js/show_user_details.js"></script>
+    
+
+    <div th:replace="fragments/navbar :: navBar"></div>
+
+    <!-- Page Content -->
+    <div class="container" th:object="${user}">
+        <div class="w-100 mb-2 mt-4"></div>
+        <div class="row">
+            <div class="col">
+                <nav>
+                    <div class="nav nav-tabs mb-2" id="nav-tab" role="tablist">
+                        <a class="nav-item btn btn-outline-info ml-1 mr-1 mb-2 active" id="nav-home-tab"
+                            data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home"
+                            aria-selected="true">My Info</a>
+                        <a class="nav-item btn btn-outline-primary ml-1 mr-1 mb-2" id="nav-profile-tab"
+                            data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile"
+                            aria-selected="false">My Cars</a>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+
+                        <div class="card-deck mb-2">
+                            <div class="card shadow">
+                                <div class="card-header text-white bg-dark">First Name</div>
+                                <div class="card-body">
+                                    <form class="form" method="POST" th:action="@{/api/user/edit/name}"
+                                        onsubmit="return name_validate()">
+                                        <input type="text" id="inputFirstname" name="name"
+                                            class="form-control mr-1 mb-1" th:placeholder="*{name}"
+                                            onfocusout="validateFirstName()" disabled required>
+                                        <button id="editname" onclick="enableEditName()" class="btn btn-warning mb-1"
+                                            type="button">Edit</button>
+                                        <button id="submitname" class="btn btn-success mb-1" type="submit"
+                                            style="display: none;">Save</button>
+                                        <br><span><small>&nbsp</small></span>
+                                    </form>
+                                </div>
+                                <div class="card-footer">
+                                    <small class="text">Freely change as necessary.</small>
+                                </div>
+                            </div>
+                            <div class="card shadow">
+                                <div class="card-header text-white bg-dark">Last Name</div>
+                                <div class="card-body">
+                                    <form class="form" method="POST" th:action="@{/api/user/edit/lastName}"
+                                        onsubmit="return lastName_validate()">
+                                        <input type="text" id="inputLastName" name="lastName"
+                                            class="form-control mr-1 mb-1" th:placeholder="*{lastName}"
+                                            onfocusout="validateLastName()" disabled required>
+                                        <button id="editlastName" onclick="enableEditlastName()"
+                                            class="btn btn-warning mb-1" type="button">Edit</button>
+                                        <button id="submitlastName" class="btn btn-success mb-1" type="submit"
+                                            style="display: none;">Save</button>
+                                        <br><span><small>&nbsp</small></span>
+                                    </form>
+                                </div>
+                                <div class="card-footer">
+                                    <small class="text">Freely change as necessary.</small>
+                                </div>
+                            </div>
+                            <div class="card shadow">
+                                <div class="card-header text-white bg-dark">Email</div>
+                                <div class="card-body">
+                                    <form class="form" method="POST" th:action="@{/api/user/edit/email}"
+                                        onsubmit="return email_validate()">
+                                        <input type="email" id="inputEmail" name="email" class="form-control mr-1 mb-1"
+                                            th:placeholder="*{email}" onfocusout="validateEmail()" disabled required>
+                                        <button id="editemail" onclick="enableEditEmail()" class="btn btn-warning mb-1"
+                                            type="button">Edit</button>
+                                        <button id="submitemail" class="btn btn-success mb-1" type="submit"
+                                            style="display: none;">Save</button>
+                                        <br><span><small>&nbsp</small></span>
+                                    </form>
+                                </div>
+                                <div class="card-footer">
+                                    <small class="text">Freely change as necessary.</small>
+                                </div>
+                            </div>
+                            <div class="w-100 mb-2 mt-2"></div>
+                            <div class="card shadow">
+                                <div class="card-header text-white bg-dark">Username</div>
+                                <div class="card-body">
+                                    <form class="form">
+                                        <input type="text" id="username" name="username" class="form-control mr-1 mb-1"
+                                            th:placeholder="*{username}" disabled>
+                                        <button id="editusername" class="btn btn-danger mb-1" type="button"
+                                            disabled>Edit</button>
+                                        <br><span><small>&nbsp</small></span>
+                                    </form>
+                                </div>
+                                <div class="card-footer">
+                                    <small class="text">Your username is your personal identification on this site,
+                                        it's
+                                        unwise to change
+                                        it.</small>
+                                </div>
+                            </div>
+                            <div class="card shadow">
+                                <div class="card-header text-white bg-dark">Password</div>
+                                <div class="card-body">
+                                    <form class="form" method="POST" th:action="@{/api/user/edit/password}"
+                                        onsubmit="return password_validate()">
+                                        <input type="password" id="inputPassOld" name="passOld"
+                                            class="form-control mr-1 mb-1" placeholder="Old password" disabled required
+                                            onfocusout="checkOldPassword()">
+                                        <input type="password" id="inputPassOne" name="passOne"
+                                            class="form-control mr-1 mb-1" placeholder="Password" disabled required
+                                            onfocusout="validatePassword()">
+                                        <input type="password" id="inputPassTwo" name="passTwo"
+                                            class="form-control mr-1 mb-1" placeholder="Confirm password" disabled
+                                            required onfocusout="validatePassword()">
+                                        <button id="editpassword" onclick="enableUpdatePassword()"
+                                            class="btn btn-warning mb-1" type="button">Edit</button>
+                                        <button id="submitpassword" class="btn btn-success mb-1" type="submit"
+                                            style="display: none;">Save</button>
+                                        <br><span><small>&nbsp</small></span>
+                                    </form>
+                                </div>
+                                <div class="card-footer">
+                                    <small class="text">Freely change as necessary.</small>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                        <!--my cars tab-->
+                        <div th:if="${vehicles}">
+                            <div class="card-deck">
+                                <div th:each="veh: ${vehicles}" style="white-space:nowrap;">
+                                    <div class="card shadow  my-3" style="max-width: 21.7rem;">
+                                        <img class="card-img-top"
+                                            th:src="@{${'/images/models/'+veh.manufacturername+'.jpg'}}"
+                                            alt="Card image cap">
+                                        <form class="form" method="POST" th:action="@{/show_errors}">
+                                            <div class="card-header d-flex justify-content-between text-white bg-dark">
+                                                <span class="pt-2 font-weight-bold"
+                                                    th:utext="${veh.manufacturername +' '+ veh.modelname}"></span>
+                                                <button class="btn btn-danger btn-sm pt-2" type="submit" th:name="id"
+                                                    th:value="${veh.id}">Show
+                                                    Scanned Errors</button>
+                                            </div>
+                                        </form>
+                                        <div class="card-body">
+                                            <div class="card-title mb-1 mt-1">
+                                                <h6 class="mb-1 lead">Fuel</h6>
+                                            </div>
+                                            <p class="mb-1"><span th:utext="${veh.engineType}"></span></p>
+                                            <hr>
+                                            <div class="card-title mb-1 mt-1">
+                                                <h6 class="mb-1 lead">Year</h6>
+                                            </div>
+                                            <p class="mb-1"><span th:utext="${veh.year}"></span></p>
+                                            <hr>
+                                            <div class="card-title mb-1 mt-1">
+                                                <h6 class="mb-1 lead">Power Output</h6>
+                                            </div>
+                                            <p class="mb-1"><span th:utext="${veh.power}"></span></p>
+                                            <hr>
+                                            <div class="card-title mb-1 mt-1">
+                                                <h6 class="mb-1 lead">Gearbox</h6>
+                                            </div>
+                                            <p class="mb-1"><span th:utext="${veh.gearbox}"></span></p>
+                                            <hr>
+                                            <div>
+                                                <div class="card-title mb-1 mt-1">
+                                                    <h6 class="mb-1 lead">VIN</h6>
+                                                </div>
+                                                <p class="mb-1"><span th:utext="${veh.vin}"></span></p>
+                                                <p th:if="${veh.vin.isEmpty()}" class="mb-1">Not specified</span></p>
+                                            </div>
+                                            <hr>
+                                            <div>
+                                                <div class="card-title mb-1 mt-1">
+                                                    <h6 class="mb-1 lead">Compression Ratio</h6>
+                                                </div>
+                                                <p class="mb-1"><span th:utext="${veh.compressionRatio}"></span></p>
+                                                <p th:if="${veh.compressionRatio.isEmpty()}" class="mb-1">Not
+                                                    specified</span></p>
+                                            </div>
+                                            <hr>
+                                            <div>
+                                                <div class="card-title mb-1 mt-1">
+                                                    <h6 class="mb-1 lead">Number of Cylinders</h6>
+                                                </div>
+                                                <p class="mb-1"><span th:utext="${veh.cylinders}"></span></p>
+                                                <p th:if="${veh.cylinders.isEmpty()}" class="mb-1">Not specified</span>
+                                                </p>
+                                            </div>
+                                            <hr>
+                                            <div>
+                                                <div class="card-title mb-1 mt-1">
+                                                    <h6 class="mb-1 lead">Engine Oil Grade</h6>
+                                                </div>
+                                                <p class="mb-1"><span th:utext="${veh.engineOilGrade}"></span></p>
+                                                <p th:if="${veh.engineOilGrade.isEmpty()}" class="mb-1">Not
+                                                    specified</span></p>
+                                            </div>
+                                            <hr>
+                                            <div>
+                                                <div class="card-title mb-1 mt-1">
+                                                    <h6 class="mb-1 lead">Engine Capacity</h6>
+                                                </div>
+                                                <p class="mb-1"><span th:utext="${veh.engineCapacity}"></span></p>
+                                                <p th:if="${veh.engineCapacity.isEmpty()}" class="mb-1">Not
+                                                    specified</span></p>
+                                            </div>
+                                            <hr>
+                                            <div>
+                                                <div class="card-title mb-1 mt-1">
+                                                    <h6 class="mb-1 lead">Engine Code</h6>
+                                                </div>
+                                                <p class="mb-1"><span th:utext="${veh.engineCode}"></span></p>
+                                                <p th:if="${veh.engineCode.isEmpty()}" class="mb-1">Not
+                                                    specified</span></p>
+                                            </div>
+                                        </div>
+                                        <form class="form" method="POST" th:action="@{/delete_vehicle}">
+                                            <div class="card-footer bg-danger text-white">
+                                                <button class="btn btn-danger btn-block active shadow-sm"
+                                                    aria-pressed="true" type="submit" th:name="id"
+                                                    th:value="${veh.id}" 
+                                                    onclick="return confirm('Are you sure you want to delete this vehicle?');">
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.row -->
+
+                        
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- End col -->
+        </div>
+    </div>
+    <div class="w-100 mb-6 mt-2"></div>
+
+    <!-- /.container -->
+<!--
+    <div th:replace="fragments/footer.html :: footerFragment"></div>
+-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+
+</html>

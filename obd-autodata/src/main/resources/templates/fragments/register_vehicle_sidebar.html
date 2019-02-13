@@ -1,0 +1,19 @@
+<div th:fragment="registerVehicleSidebar">
+    <div class="card my-4">
+        <h5 class="card-header">Register your vehicle now!</h5>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Takes only a few minutes</li>
+                <li class="list-group-item">We will ask you details about your vehicle</li>
+                <li class="list-group-item">Afterwards, we will read your OBD data</li>
+                <li class="list-group-item">You will be able to see every error</li>
+                <li class="list-group-item">We'll even give you a rough price for the repair</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <form th:action="@{/register_vehicle}" method="GET" class="form-inline">
+                <button type="submit" style="border-radius: 2rem;" class="btn btn-primary mb-2">Let's do it!</button>
+            </form>
+        </div>
+    </div>
+</div>

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,13 +24,15 @@ public class ObdUserService {
     @Autowired
     private RoleRepository roleRepository;
 
+
     @Autowired
     PasswordEncoder passwordEncoder;
 
     // CREATE
     public User saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(Arrays.asList(new UserRole("USER")));
+        user.setRoles(Arrays.asList(roleRepository.findByRole("USER")));
+        user.setActive(0);
         return userRepository.save(user);
     }
 
@@ -44,6 +45,10 @@ public class ObdUserService {
         return userRepository.findById(user_id);
     }
 
+    public UserRole getAdminRole(){
+        return roleRepository.findByRole("ADMIN");
+    }
+    
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -55,7 +60,7 @@ public class ObdUserService {
     }
 
     public User updateUserLastName(User user, String lastName) {
-        user.setLastname(lastName);
+        user.setLastName(lastName);
         return userRepository.save(user);
     }
     
@@ -71,8 +76,21 @@ public class ObdUserService {
     
     public User updateUserGiveAdmin(User user) {
         List<UserRole> roles = user.getRoles();
-        roles.add(new UserRole("ADMIN"));
+        roles.add(roleRepository.findByRole("ADMIN"));
         user.setRoles(roles);
+        return userRepository.save(user);
+    }
+    public User updateUserRemoveAdmin(User user) {
+        List<UserRole> roles = user.getRoles();
+        UserRole adminRole = roleRepository.findByRole("ADMIN");
+        roles.remove(adminRole);
+        user.setRoles(roles);
+        return userRepository.save(user);
+    }
+    
+    public User updateActive(String username, int active) {
+        User user = this.getUserByUsername(username);
+        user.setActive(active);
         return userRepository.save(user);
     }
 

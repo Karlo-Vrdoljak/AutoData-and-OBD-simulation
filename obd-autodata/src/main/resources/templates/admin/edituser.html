@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Edit User</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link th:href="@{/css/blog-post.css}" rel="stylesheet">
+    <link th:href="@{/css/dashboard.css}" rel="stylesheet">
+    <link th:href="@{/css/profile.css}" rel="stylesheet">
+</head>
+
+<body>
+    <!--
+    <script src="js/validation.js"></script>
+    <script src="js/show_user_details.js"></script>
+    -->
+
+    <div th:replace="fragments/navbar :: navBar"></div>
+
+    <!-- Page Content -->
+    <div class="container" th:object="${user}">
+        <div class="w-100 mb-2 mt-4"></div>
+        <div class="row">
+            <div class="col">
+                <nav>
+                    <div class="nav nav-tabs mb-2" id="nav-tab" role="tablist">
+                        <a class="nav-item btn btn-outline-info ml-1 mr-1 mb-2 active" id="nav-home-tab" data-toggle="tab"
+                            href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">User Details</a>
+                        <a class="nav-item btn btn-outline-primary ml-1 mr-1 mb-2" id="nav-profile-tab" data-toggle="tab"
+                            href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">User
+                            Vehicles</a>
+
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent" th:object="${roles}">
+                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+
+                        <div class="card-deck">
+                            <div class="card shadow" style="max-width: 33rem;">
+                                <div class="card-header text-white bg-dark">Change role for <span th:utext="${user.username}"></span></div>
+                                <div class="card-body">
+                                    <form th:action="@{/api/user/edit/role}" method="POST" class="form-inline my-2 my-lg-0">
+
+                                        <select name="givenRole" class="form-control" aria-describedby="roleHelp">
+                                            <option value="removeADMIN" th:if="${#lists.contains(roles, 'ADMIN')} == true">Remove
+                                                Admin privileges</option>
+                                            <option value="giveADMIN" th:unless="${#lists.contains(roles, 'ADMIN')} == true">Give
+                                                user Admin privileges</option>
+                                        </select>
+
+                                        <button name="username" th:value="${user.username}" class="btn btn-success"
+                                            type="submit">Submit</button>
+                                    </form>
+                                </div>
+                                <div class="card-footer">
+                                    <small id="roleHelp" th:if="${#lists.contains(roles, 'ADMIN')} == true" class=" form-text
+                                        text-muted">
+                                        Removing his/hers ADMIN privilege, you will degrade their role on this site
+                                        to USER,
+                                        consider this decision wisely!
+                                    </small>
+                                    <small id="roleHelp" th:unless="${#lists.contains(roles, 'ADMIN')} == true" class="
+                                        form-text text-muted">
+                                        If you give this user ADMIN privileges, he/she can access or do whatever
+                                        you can on
+                                        this site, consider this decision wisely!
+                                    </small>
+
+                                </div>
+                            </div>
+                            <div class="card shadow" style="max-width: 33rem;">
+                                <div class="card-header text-white bg-dark">Change the accessibility of <span th:utext="${user.username}"></span>'s
+                                    account</div>
+                                <div class="card-body">
+                                    <form th:action="@{/api/user/edit/active}" method="post" class="form-inline my-2 my-lg-0">
+                                        <select name="givenActive" class="form-control" aria-describedby="statusHelp">
+                                            <option value="ActiveOff" th:if="${user.getActive() == 1}">Disable this
+                                                account</option>
+                                            <option value="ActiveOn" th:unless="${user.getActive() == 1}">Enable this
+                                                account</option>
+                                        </select>
+                                        <button name="username" th:value="${user.username}" class="btn btn-success"
+                                            type="submit">Submit</button>
+                                    </form>
+                                </div>
+                                <div class="card-footer">
+                                    <small id="statusHelp" th:if="${user.getActive() == 1}" class="form-text text-muted">
+                                        Disabling this account, the user it's registered to will no longer be able to
+                                        login,
+                                        but all of his/hers data will be saved regardlessly.
+                                    </small>
+                                    <small id="statusHelp" th:unless="${user.getActive() == 1}" class="form-text text-muted">
+                                        Enabling this account, the user it's registered to will be able to login again
+                                        and
+                                        resume using this site with the role he/she was given.
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="w-100 mb-2 mt-2"></div>
+                            <div class="card shadow" style="max-width: 33rem;">
+                                <div class="card-header text-white  bg-dark">Delete
+                                    <span th:utext="${user.username}"></span>'s
+                                    account</div>
+                                <div class="card-body">
+                                    <form th:action="@{/api/user/delete}" method="post" class="form-inline my-2 my-lg-0">
+                                        <select class="form-control" aria-describedby="deleteHelp">
+                                            <option ><span style="text-decoration-color: red">Delete</span> this
+                                                account</option>
+                                        </select>
+                                        <button name="username" th:value="${user.username}" class="btn btn-danger"
+                                            type="submit" onclick="return confirm('Are you sure you want to delete this user?');">Submit</button>
+                                    </form>
+                                </div>
+                                <div class="card-footer">
+                                    <small id="deleteHelp"  class="form-text text-muted">
+                                        Deleting this account, the user it's registered to will no longer be able to
+                                        recover his/hers account, this cannot be undone, consider this decision wisely!
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                        <!-- user vehicles -->
+                        <div th:if="${vehicles}">
+                        <div class="card-deck">
+                            <div th:each="veh: ${vehicles}" style="white-space:nowrap;">
+                                <div class="card shadow  my-3" style="max-width: 20rem;">
+                                    <img class="card-img-top" th:src="@{${'/images/models/'+veh.manufacturername+'.jpg'}}" alt="Card image cap">
+                                    <form class="form" method="POST" th:action="@{/show_errors}">
+                                        <div class="card-header d-flex justify-content-between text-white bg-dark">
+                                            <span class="pt-2 font-weight-bold" th:utext="${veh.manufacturername +' '+ veh.modelname}"></span>
+                                            <button class="btn btn-danger btn-sm pt-2" type="submit" th:name="id"
+                                                th:value="${veh.id}">Show
+                                                Scanned Errors</button>
+                                        </div>
+                                    </form>
+                                    <div class="card-body">
+                                        <div class="card-title mb-1 mt-1">
+                                            <h6 class="mb-1 lead">Fuel</h6>
+                                        </div>
+                                        <p class="mb-1"><span th:utext="${veh.engineType}"></span></p>
+                                        <hr>
+                                        <div class="card-title mb-1 mt-1">
+                                            <h6 class="mb-1 lead">Year</h6>
+                                        </div>
+                                        <p class="mb-1"><span th:utext="${veh.year}"></span></p>
+                                        <hr>
+                                        <div class="card-title mb-1 mt-1">
+                                            <h6 class="mb-1 lead">Power Output</h6>
+                                        </div>
+                                        <p class="mb-1"><span th:utext="${veh.power}"></span></p>
+                                        <hr>
+                                        <div class="card-title mb-1 mt-1">
+                                            <h6 class="mb-1 lead">Gearbox</h6>
+                                        </div>
+                                        <p class="mb-1"><span th:utext="${veh.gearbox}"></span></p>
+                                        <hr>
+                                        <div>
+                                            <div class="card-title mb-1 mt-1">
+                                                <h6 class="mb-1 lead">VIN</h6>
+                                            </div>
+                                            <p class="mb-1"><span th:utext="${veh.vin}"></span></p>
+                                            <p th:if="${veh.vin.isEmpty()}" class="mb-1">Not specified</span></p>
+                                        </div>
+                                        <hr>
+                                        <div>
+                                            <div class="card-title mb-1 mt-1">
+                                                <h6 class="mb-1 lead">Compression Ratio</h6>
+                                            </div>
+                                            <p class="mb-1"><span th:utext="${veh.compressionRatio}"></span></p>
+                                            <p th:if="${veh.compressionRatio.isEmpty()}" class="mb-1">Not
+                                                specified</span></p>
+                                        </div>
+                                        <hr>
+                                        <div>
+                                            <div class="card-title mb-1 mt-1">
+                                                <h6 class="mb-1 lead">Number of Cylinders</h6>
+                                            </div>
+                                            <p class="mb-1"><span th:utext="${veh.cylinders}"></span></p>
+                                            <p th:if="${veh.cylinders.isEmpty()}" class="mb-1">Not specified</span>
+                                            </p>
+                                        </div>
+                                        <hr>
+                                        <div>
+                                            <div class="card-title mb-1 mt-1">
+                                                <h6 class="mb-1 lead">Engine Oil Grade</h6>
+                                            </div>
+                                            <p class="mb-1"><span th:utext="${veh.engineOilGrade}"></span></p>
+                                            <p th:if="${veh.engineOilGrade.isEmpty()}" class="mb-1">Not
+                                                specified</span></p>
+                                        </div>
+                                        <hr>
+                                        <div>
+                                            <div class="card-title mb-1 mt-1">
+                                                <h6 class="mb-1 lead">Engine Capacity</h6>
+                                            </div>
+                                            <p class="mb-1"><span th:utext="${veh.engineCapacity}"></span></p>
+                                            <p th:if="${veh.engineCapacity.isEmpty()}" class="mb-1">Not
+                                                specified</span></p>
+                                        </div>
+                                        <hr>
+                                        <div>
+                                            <div class="card-title mb-1 mt-1">
+                                                <h6 class="mb-1 lead">Engine Code</h6>
+                                            </div>
+                                            <p class="mb-1"><span th:utext="${veh.engineCode}"></span></p>
+                                            <p th:if="${veh.engineCode.isEmpty()}" class="mb-1">Not
+                                                specified</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="w-100 mb-6 mt-2"></div>
+
+    <!-- /.container -->
+
+    <!--
+        <div th:replace="fragments/footer.html :: footerFragment"></div>
+    -->
+    <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+    <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+
+</body>
+
+</html>

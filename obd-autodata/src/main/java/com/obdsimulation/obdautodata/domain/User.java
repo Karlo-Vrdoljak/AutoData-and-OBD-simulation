@@ -1,7 +1,6 @@
 package com.obdsimulation.obdautodata.domain;
 
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,15 +9,23 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
+
 import org.hibernate.validator.constraints.Length;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name="users")
 public class User {
@@ -54,9 +61,9 @@ public class User {
     private String password;
 
 	//@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<UserRole> roles;
-
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	private List<UserRole> roles;
+	
     // contruct missing
 
 	public List<UserRole> getRoles()
@@ -105,12 +112,12 @@ public class User {
 	}
 
 
-	public String getLastname()
+	public String getLastName()
 	{
 		return this.lastName;
 	}
 
-	public User setLastname(String lastName)
+	public User setLastName(String lastName)
 	{
 		this.lastName = lastName;
 		return this;

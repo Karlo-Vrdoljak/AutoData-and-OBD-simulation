@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/head :: headerFragment">
+  <title id="pageTitle">About</title>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <div th:replace="fragments/navbar :: navBar"></div>
+  <!-- Page Content -->
+  <div class="container">
+
+    <div class="row">
+
+      <!-- Post Content Column -->
+      <div class="col-lg-8">
+
+        <!-- Title -->
+        <h1 class="mt-4">What is this about?</h1>
+
+        <!-- Author -->
+        <p class="lead">
+
+        </p>
+
+        <hr>
+
+        <!-- Date/Time -->
+        <p>OBD Vehicle Diagnostic Service</p>
+
+        <hr>
+
+        <!-- Preview Image -->
+        <img class="img-fluid rounded" th:src="@{/images/about.jpg}" width="900" alt="">
+
+        <hr>
+
+        <!-- Post Content -->
+        <p class="lead">What is OBD?</p>
+
+        <p>On-board diagnostics (OBD) is an automotive term referring to a vehicle's self-diagnostic and reporting
+          capability. OBD
+          systems give the vehicle owner or repair technician access to the status of the various vehicle subsystems.
+          The amount
+          of diagnostic information available via OBD has varied widely since its introduction in the early 1980s
+          versions of
+          on-board vehicle computers.</p>
+
+        <p class="lead">We provide a simulational service to scan your On-board diagnostics (OBD) device data</p>
+
+        <p>Assuming you've seen our demonstrational post, you can easily register your own vehicle
+          so you can get the same result as our demo car.
+        </p>
+
+        <p class="lead">You can scan any OBD system up to OBD-I</p>
+
+        <p>"Why only up to OBD-I?" you might ask.
+          <br>The answer is simple, this application is used for simulational purposes.
+        </p>
+
+        <p class="lead">The purpose of OBD systems</p>
+        <p>
+          Modern OBD implementations, OBD-I included, use a standardized digital communications port to provide
+          real-time data in addition to a standardized series of diagnostic trouble codes, or DTCs, which allow one to <strong>rapidly identify </strong>and remedy
+          malfunctions within the vehicle.
+        </p>
+
+
+
+        <hr>
+      </div>
+
+      <!-- Sidebar Widgets Column -->
+      <div class="col-md-4">
+
+
+        <div sec:authorize="isAnonymous()">
+          <!-- login Widget -->
+          <div th:replace="fragments/login_sidebar :: loginSideBar"></div>
+          <!-- Register redirect Widget -->
+          <div th:replace="fragments/register_redirect_sidebar :: registerRedirectSidebar"></div>
+        </div>
+
+
+        <!-- Side Widget -->
+        <div sec:authorize="isAuthenticated()">
+          <!-- Side Widget -->
+          <div th:replace="fragments/register_vehicle_sidebar :: registerVehicleSidebar"></div>
+        </div>
+
+      </div>
+
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <div th:replace="fragments/footer.html :: footerFragment"></div>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

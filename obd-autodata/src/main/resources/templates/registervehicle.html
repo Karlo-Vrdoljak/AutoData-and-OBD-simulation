@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Vehicle Registration</title>
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/blog-post.css" rel="stylesheet">
+    <link href="css/register.css" rel="stylesheet">
+    <link href="css/image_register_vehicle.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div th:replace="fragments/navbar :: navBar"></div>
+    <script th:inline="javascript">
+        var vehs = /*[[${vehicles}]]*/ null;
+        var validManufacturername = false;
+        var validModelname = false;
+        var validYear = false;
+        var validEngineType = false;
+        var validPower = false;
+        var validGearbox = false;
+
+
+        function validateVehicle() {
+            if (validEngineType == true && validGearbox == true && validManufacturername == true
+                && validModelname == true && validPower == true && validYear == true)
+                return true;
+            else {
+                return false;
+            }
+        }
+
+        function validateManufacturer() {
+            var make = document.getElementById("inputManufacturer").value;
+            if (make == "") {
+                validManufacturername = false;
+                document.getElementById('inputManufacturer').style.borderColor = "red";
+                $('#inputManufacturer').siblings("span").text('You must provide your car\'s brand!').css('color', 'red');
+                return;
+            }
+            else {
+                make = make.charAt(0).toUpperCase() + make.slice(1);
+                var check = vehs;
+                var check = check.filter(function (veh) {
+                    return veh.brand == make;
+                });
+                if (jQuery.isEmptyObject(check) == false) {
+                    document.getElementById('inputManufacturer').style.borderColor = "green";
+                    document.getElementById("inputManufacturer").value = make;
+                    $('#inputManufacturer').siblings("span").html('&nbsp');
+                    validManufacturername = true;
+                    var allModels = check.map(item => item.models);
+                    var models = document.getElementById('inputModel');
+                    while (models.firstChild) {
+                        models.removeChild(models.firstChild);
+                    }
+                    for (let model_array of allModels) {
+                        for(let model_name of model_array){
+                            var opt = document.createElement('option');
+                            opt.value = model_name;
+                            opt.innerHTML = model_name;
+                            models.appendChild(opt);
+                        }
+                        
+                    }
+                } else {
+                    validManufacturername = false;
+                    document.getElementById('inputManufacturer').style.borderColor = "red";
+                    $('#inputManufacturer').siblings("span").text('There is no such manufacturer!').css('color', 'red');
+                    return;
+                }
+
+            }
+        }
+
+        function validateModel() {
+            var make = document.getElementById("inputManufacturer").value;
+            var model = document.getElementById("inputModel").value;
+            if (model == "") {
+                validModelname = false;
+                document.getElementById('inputModel').style.borderColor = "red";
+                $('#inputModel').siblings("span").text('You must provide your car\'s model!').css('color', 'red');
+                return;
+            }
+            else {
+                var checkBrand = vehs;
+                var checkBrand = checkBrand.filter(function (veh) {
+                    return veh.brand == make;
+                });
+                model = model.charAt(0).toUpperCase() + model.slice(1);
+                var check = checkBrand.filter(function (veh) {
+                    if (veh.models.includes(model)) {
+                        return veh;
+                    }
+                });
+                if (jQuery.isEmptyObject(check) == false) {
+                    document.getElementById('inputModel').style.borderColor = "green";
+                    document.getElementById("inputModel").value = model;
+                    $('#inputModel').siblings("span").html('&nbsp');
+                    validModelname = true;
+                } else {
+                    validModelname = false;
+                    document.getElementById('inputModel').style.borderColor = "red";
+                    $('#inputModel').siblings("span").text(make + ' never made that model!').css('color', 'red');
+                    return;
+                }
+
+            }
+        }
+
+        function validateYear() {
+            var year_str = document.getElementById("inputYear").value;
+            if (year_str == "") {
+                validYear = false;
+                document.getElementById('inputYear').style.borderColor = "red";
+                $('#inputYear').siblings("span").text('You must provide the manufacture year!').css('color', 'red');
+                return;
+            }
+            else {
+                var year = parseInt(year_str);
+                if ((year > 1959) == true && (year < 2005) == true) {
+                    document.getElementById('inputYear').style.borderColor = "green";
+                    $('#inputYear').siblings("span").html('&nbsp');
+                    validYear = true;
+                } else {
+                    validYear = false;
+                    document.getElementById('inputYear').style.borderColor = "red";
+                    $('#inputYear').siblings("span").text('No model was made that year!').css('color', 'red');
+                    return;
+                }
+
+            }
+        }
+
+        function validateEngineType() {
+            var type = document.getElementById("inputEngineType").value;
+            if (type == "") {
+                validEngineType = false;
+                document.getElementById('inputEngineType').style.borderColor = "red";
+                $('#inputEngineType').siblings("span").text('You must provide your engine type!').css('color', 'red');
+                return;
+            }
+            else {
+                type = type.charAt(0).toUpperCase() + type.slice(1);
+                var types = ["Diesel", "Petrol", "LPG", "lpg", "Gasoline", "Benzinac", "Dizel", "Benzina", "Dizelaš", "Dizelas", "Plin", "Lož ulje", "Loža", "Loz ulje", "Plavi dizel", "Šta mu uliješ", "Sta mu ulijes"];
+                if (types.includes(type)) {
+                    document.getElementById('inputEngineType').style.borderColor = "green";
+                    document.getElementById("inputEngineType").value = type;
+                    $('#inputEngineType').siblings("span").html('&nbsp');
+                    validEngineType = true;
+                } else {
+                    validEngineType = false;
+                    document.getElementById('inputEngineType').style.borderColor = "red";
+                    $('#inputEngineType').siblings("span").text('Engine\'s don\'t run on the fuel type specified!').css('color', 'red');
+                    return;
+                }
+
+            }
+        }
+
+        function validatePower() {
+            var power = document.getElementById("inputPower").value;
+            if (power == "") {
+                validPower = false;
+                document.getElementById('inputPower').style.borderColor = "red";
+                $('#inputPower').siblings("span").text('You must provide your car\'s power output!').css('color', 'red');
+                return;
+            }
+            else {
+                pwr = parseInt(power);
+                power = power.toLowerCase();
+                if (power.includes("hp") == false) {
+                    power += " hp";
+                }
+                power = power.toUpperCase();
+                if ((pwr <= 2000) && (pwr >= 30)) {
+                    document.getElementById('inputPower').style.borderColor = "green";
+                    document.getElementById("inputPower").value = power;
+                    $('#inputPower').siblings("span").html('&nbsp');
+                    validPower = true;
+                } else {
+                    validPower = false;
+                    document.getElementById('inputPower').style.borderColor = "red";
+                    $('#inputPower').siblings("span").text('Your engine can\'t have that kind of horsepower!').css('color', 'red');
+                    return;
+                }
+
+            }
+        }
+
+        function gearboxValidateHelper(res) {
+            if (res.includes("manual") == true || res.includes("manualac") == true || res.includes("manualni") == true || res.includes("automatic") == true || res.includes("automatik") == true) {
+                return true;
+            }
+            return false;
+        }
+
+        function validateGearbox() {
+            var gear = document.getElementById("inputGearbox").value;
+            if (gear == "") {
+                validGearbox = false;
+                document.getElementById('inputGearbox').style.borderColor = "red";
+                $('#inputGearbox').siblings("span").text('You must provide your car\'s gearbox type!').css('color', 'red');
+                return;
+            }
+            else {
+                var res = new Array();
+                res = gear.split(" ");
+                res = res.map(item => item.toLowerCase());
+                gear_num = parseInt(gear);
+                if (gearboxValidateHelper(res)) {
+                    if ((gear_num > 3) && (gear_num < 8) && res.length <= 2) {
+
+                        let result = res.map(item => item.charAt(0).toUpperCase() + item.substr(1).toLowerCase())
+                        gear = result.join(" ");
+                        document.getElementById('inputGearbox').style.borderColor = "green";
+                        document.getElementById("inputGearbox").value = gear;
+                        $('#inputGearbox').siblings("span").html('&nbsp');
+                        validGearbox = true;
+                    } else {
+                        validGearbox = false;
+                        document.getElementById('inputGearbox').style.borderColor = "red";
+                        $('#inputGearbox').siblings("span").text('Imposible gear number for this car!').css('color', 'red');
+                        return;
+                    }
+                }
+                else {
+                    validGearbox = false;
+                    document.getElementById('inputGearbox').style.borderColor = "red";
+                    $('#inputGearbox').siblings("span").text('Is it a manual or an automatic!? Please, provide one').css('color', 'red');
+                    return;
+                }
+
+            }
+        }
+
+    </script>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-xl-9 mx-auto">
+                <div class="card card-signin flex-row my-5">
+                    <div class="card-img-left d-none d-md-flex">
+
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Provide us your vehicle details</h5>
+                        <form th:action="@{/register_vehicle}" th:object="${car}" method="post" autocomplete="off"
+                            class="form-signin" onsubmit="return validateVehicle()">
+                            <!--
+                            <div class="form-label-group">
+                                <input type="text" th:field="*{manufacturername}" id="inputManufacturer"
+                                    class="form-control" placeholder="Manufacturer" name="manufacturername" required
+                                    onfocusout="validateManufacturer()">
+                                <span>&nbsp</span>
+                            </div>
+                        -->
+                            <div class="form-label-group">
+                                <label for="inputManufacturer" class="lead">Select Manufacturer</label>
+                                <select name="manufacturername" id="inputManufacturer"
+                                    onfocusout="validateManufacturer()" th:field="*{manufacturername}"
+                                    class="form-control" required>
+                                    <option th:each="veh : ${vehicles}" th:value="${veh.brand}" th:text="${veh.brand}">
+                                    </option>
+
+                                </select>
+                                <span>&nbsp</span>
+                            </div>
+
+                            <div class="form-label-group">
+                                <label for="inputModel" class="lead">Select Model</label>                                
+                                <select name="modelname" id="inputModel" aria-placeholder="Select Model"
+                                    onfocusout="validateModel()" th:field="*{modelname}" class="form-control" required>
+
+
+                                    <!-- triba iz odabrat veh sa odredenon markon pa onda predat modele ovako ce dat njih sve sve
+                                th:value="${veh.models}" th:text="${veh.models}"-->
+                                </select>
+                                <span>&nbsp</span>
+                            </div>
+
+
+                            <!-- 
+                            <div class="form-label-group">
+                                <input type="text" id="inputModel" th:field="*{modelname}" class="form-control"
+                                    placeholder="Model" required onfocusout="validateModel()">
+                                <span>&nbsp</span>
+                            </div>
+                        -->
+                            <div class="form-label-group">
+                                <input type="text" id="inputYear" th:field="*{year}" class="form-control"
+                                    placeholder="Year" required onfocusout="validateYear()">
+                                <small class="form-text text-muted">Enter vehicle's manufacture year</small>
+                                <span>&nbsp</span>
+                            </div>
+                            <div class="form-label-group">
+                                <input type="text" id="inputEngineType" th:field="*{engineType}" class="form-control"
+                                    placeholder="engine type (ex. Gasoline, LPG, Diesel)" required
+                                    onfocusout="validateEngineType()">
+                                <span>&nbsp</span>
+                            </div>
+                            <div class="form-label-group">
+                                <input type="text" id="inputPower" th:field="*{power}" class="form-control"
+                                    placeholder="Engine horsepower (ex. 100 hp)" required onfocusout="validatePower()">
+                                <span>&nbsp</span>
+                            </div>
+                            <div class="form-label-group">
+                                <input type="text" id="inputGearbox" th:field="*{gearbox}" class="form-control"
+                                    placeholder="Gearbox (ex. 5 manual, 6 automatic etc.)" required
+                                    onfocusout="validateGearbox()">
+                                <span>&nbsp</span>
+                            </div>
+
+                            <button class="btn btn-info mb-2 mt-2 text-uppercase" type="button" data-toggle="collapse"
+                                data-target="#collapseDetails" aria-expanded="false" aria-controls="collapseExample">
+                                Other details
+                            </button>
+                            <div class="collapse mt-2" id="collapseDetails">
+
+                                <div class="form-label-group">
+                                    <input type="text" id="inputVIN" th:field="*{vin}" class="form-control"
+                                        placeholder="VIN">
+                                    <small class="form-text text-muted">Your vehicle's VIN is optional</small>
+                                    <span>&nbsp</span>
+                                </div>
+                                <div class="form-label-group">
+                                    <input type="text" id="inputEngineCode" th:field="*{engineCode}"
+                                        class="form-control" placeholder="Engine code (ex. C20XE)">
+                                    <small class="form-text text-muted">Your vehicle's engine code is optional</small>
+                                    <span>&nbsp</span>
+                                </div>
+                                <div class="form-label-group">
+                                    <input type="text" id="inputEngineCode" th:field="*{compressionRatio}"
+                                        class="form-control" placeholder="Compression ratio (ex. 9.2)">
+                                    <small class="form-text text-muted">Your vehicle's compression ratio is
+                                        optional</small>
+                                    <span>&nbsp</span>
+                                </div>
+                                <div class="form-label-group">
+                                    <input type="text" id="inputCylinders" th:field="*{cylinders}" class="form-control"
+                                        placeholder="Number of cylinders (ex. 4, 6, inline 4, v6, v8 etc.)">
+                                    <small class="form-text text-muted">Your vehicle's cylinder count and type is
+                                        optional</small>
+                                    <span>&nbsp</span>
+                                </div>
+                                <div class="form-label-group">
+                                    <input type="text" id="inputEngineOilGrade" th:field="*{engineOilGrade}"
+                                        class="form-control"
+                                        placeholder="Engine oil grade (ex. 5w30, 10w40, 15w40 etc.)">
+                                    <small class="form-text text-muted">Your vehicle's oil grade is optional</small>
+                                    <span>&nbsp</span>
+                                </div>
+                                <div class="form-label-group">
+                                    <input type="text" id="inputEngineCapacity" th:field="*{engineCapacity}"
+                                        class="form-control"
+                                        placeholder="Engine capacity (ex. 1.0, 1.2, 1.6, 1.9, 2.0, 3.0 etc.)">
+                                    <small class="form-text text-muted">Your vehicle's engine capacity is
+                                        optional</small>
+                                    <span>&nbsp</span>
+                                </div>
+
+                            </div>
+
+                            <button class="btn btn-lg btn-primary btn-block text-uppercase"
+                                type="submit">Register</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="fragments/footer.html :: footerFragment"></div>
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!---
+        <script src="js/vehicle_validation.js"></script>
+    -->
+</body>
+
+</html>
